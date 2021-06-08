@@ -1,4 +1,5 @@
 #include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
 using namespace Rcpp;
 using namespace arma;
 #include <stdio.h>
@@ -134,7 +135,7 @@ vec GroupRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, vec w,
       {
         LLmin = LL;
         p = pnew;
-        M = Mnew;
+        M = Mnew;compileAttributes r
       }
       else
       {
