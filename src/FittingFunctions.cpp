@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 using namespace Rcpp;
@@ -9,7 +10,6 @@ using namespace arma;
 #include <Rdefines.h>
 #include <iostream>
 #include <vector>
-
 // Returns sign of a vector
 vec sgn(vec val) {
   vec out(val.size());
