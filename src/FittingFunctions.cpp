@@ -70,7 +70,7 @@ void GetHessian(mat x, vec beta, vec p, vec y, double lam2, vec w, vec& b, mat& 
 }
 
 // Calculates intercept in iterative way 
-double CalculateIntercept(vec y, vec p, vec w)
+double CalculateDeltaIntercept(vec y, vec p, vec w)
 {
   int ns = y.size();
   double DeltaBeta0=1.0;
@@ -88,7 +88,7 @@ double CalculateIntercept(vec y, vec p, vec w)
 
 
 
-vec GroupRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, vec w, vec IndFor0,vec IndTFor0, vec& M, double& LLmin)
+vec GroupRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, double& Intercept, vec w, vec IndFor0,vec IndTFor0, vec& M, double& LLmin)
 {
   int m = beta.size();
   int nt = tV.size();
@@ -135,7 +135,7 @@ vec GroupRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, vec w,
       {
         LLmin = LL;
         p = pnew;
-        M = Mnew;compileAttributes r
+        M = Mnew;
       }
       else
       {
