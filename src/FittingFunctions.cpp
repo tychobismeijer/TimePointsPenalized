@@ -14,8 +14,8 @@ using namespace arma;
 
 // Returns sign of a vector
 // [[Rcpp::export]]
-vec sgn(vec val) {
-  vec out(val.size());
+arma::vec sgn(arma::vec val) {
+  arma::vec out(val.size());
   for (int i=0; i<val.size(); i++)
   {
     if (val(i)>0) out(i)=1;
@@ -27,13 +27,13 @@ vec sgn(vec val) {
 
 // Make one step for the t-group of a gene (soft threshold)
 // [[Rcpp::export]]
-vec glmnetSimple(mat X,vec Y,double lam1)
+arma::vec glmnetSimple(arma::mat X,arma::vec Y,double lam1)
 {
   int ng = Y.size();
-  vec beta0(ng); beta0 = -solve( X, Y );
-  vec sign0(ng); sign0 = sgn(beta0);
-  vec beta(ng); beta = -solve( X, Y + sign0*lam1);
-  vec sign(ng); sign = sgn(beta);
+  arma::vec beta0(ng); beta0 = -solve( X, Y );
+  arma::vec sign0(ng); sign0 = sgn(beta0);
+  arma::vec beta(ng); beta = -solve( X, Y + sign0*lam1);
+  arma::vec sign(ng); sign = sgn(beta);
   for (int g=0;g<ng;g++) if (sign0(g)!=sign(g)) return(beta*0);
   return(beta);
 }
@@ -42,7 +42,7 @@ vec glmnetSimple(mat X,vec Y,double lam1)
 
 // Calculates first (b) and second (a) derivatives of the function to minimize 
 // [[Rcpp::export]]
-void GetHessian(mat x, vec beta, vec p, vec y, double lam2, vec w, vec& b, mat& a) 
+void GetHessian(arma::mat x, arma::vec beta, arma::vec p, arma::vec y, double lam2, arma::vec w, arma::vec& b, arma::mat& a) 
 {
   int ng = beta.size();
   int ns = y.size();
@@ -76,7 +76,7 @@ void GetHessian(mat x, vec beta, vec p, vec y, double lam2, vec w, vec& b, mat& 
 
 // Calculates intercept in iterative way 
 // [[Rcpp::export]]
-double CalculateDeltaIntercept(vec y, vec p, vec w)
+double CalculateDeltaIntercept(arma::vec y, arma::vec p, arma::vec w)
 {
   int ns = y.size();
   double DeltaBeta0=1.0;
@@ -94,19 +94,19 @@ double CalculateDeltaIntercept(vec y, vec p, vec w)
 
 
 // [[Rcpp::export]]
-vec GroupRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, double& Intercept, vec w, vec IndFor0,vec IndTFor0, vec& M, double& LLmin)
+arma::vec GroupRound(arma::mat x0, arma::vec y, arma::vec tV, double lam1, double lam2, arma::vec beta, double& Intercept, arma::vec w, arma::vec IndFor0, arma::vec IndTFor0, arma::vec& M, double& LLmin)
 {
   int m = beta.size();
   int nt = tV.size();
   int ns = y.size();
   int m0 = m/nt;
-  uvec dGg(nt);
-  mat x0G(ns,nt);
-  vec b(nt);
-  mat a(nt,nt);
-  vec p(ns); 
-  vec betaOld(nt);
-  vec betaNew(nt);
+  arma::uvec dGg(nt);
+  arma::mat x0G(ns,nt);
+  arma::vec b(nt);
+  arma::mat a(nt,nt);
+  arma::vec p(ns); 
+  arma::vec betaOld(nt);
+  arma::vec betaNew(nt);
   double LL;
   
   p = 1.0/(1.0+exp(-M)); for (int s=0;s<ns;s++) {if (p(s) > 1.0-1.0e-5) p(s)=1.0-1.0e-5; else if (p(s)<1.0e-5) p(s)=1.0e-5;}
@@ -154,17 +154,17 @@ vec GroupRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, double
 
 
 // [[Rcpp::export]]
-vec SingleGeneRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, double& Intercept, vec w, vec IndFor0,vec IndTFor0, vec& M, double& LLmin)
+arma::vec SingleGeneRound(arma::mat x0, arma::vec y, arma::vec tV, double lam1, double lam2, arma::vec beta, double& Intercept, arma::vec w, arma::vec IndFor0, arma::vec IndTFor0, arma::vec& M, double& LLmin)
 {
   int m = beta.size();
   int nt = tV.size();
   int ns = y.size();
   int m0 = m/nt;
-  vec b(nt);
-  mat a(nt,nt);
-  vec p(ns); 
-  uvec dGg(nt);
-  mat x0G(ns,nt);
+  arma::vec b(nt);
+  arma::mat a(nt,nt);
+  arma::vec p(ns); 
+  arma::uvec dGg(nt);
+  arma::mat x0G(ns,nt);
   double LL;
   p = 1.0/(1.0+exp(-M)); for (int s=0;s<ns;s++) {if (p(s) > 1.0-1e-5) p(s)=1.0-1e-5; else if (p(s)<1.0e-5) p(s)=1.0e-5;}
   double F=0; for (int s=0;s<ns;s++) F += -y(s)*log(p(s))*w(s) - (1-y(s))*log(1.0-p(s))*w(s);
@@ -192,9 +192,9 @@ vec SingleGeneRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, d
       
       if (betaNew!=betaOld)
       {
-        vec Mnew = M;
+        arma::vec Mnew = M;
         for (int s=0;s<ns;s++) Mnew(s) += x0G(s,it) * (betaNew-betaOld);
-        vec pnew = 1.0/(1.0+exp(-Mnew)); for (int s=0;s<ns;s++) {if (pnew(s) > 1.0-1e-5) pnew(s)=1.0-1e-5; else if (pnew(s)<1.0e-5) pnew(s)=1.0e-5;}
+        arma::vec pnew = 1.0/(1.0+exp(-Mnew)); for (int s=0;s<ns;s++) {if (pnew(s) > 1.0-1e-5) pnew(s)=1.0-1e-5; else if (pnew(s)<1.0e-5) pnew(s)=1.0e-5;}
         beta(g+it*m0) = betaNew;
         LL=0;
         for (int s=0;s<ns;s++) LL += -y(s)*log(pnew(s))*w(s) - (1-y(s))*log(1.0-pnew(s))*w(s);
@@ -219,7 +219,7 @@ vec SingleGeneRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, d
 
 
 // [[Rcpp::export]]
-vec FitRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, double Intercept, vec w, vec IndFor0,vec IndTFor0)
+arma::vec FitRound(arma::mat x0, arma::vec y, arma::vec tV, double lam1, double lam2, arma::vec beta, double Intercept, arma::vec w, arma::vec IndFor0, arma::vec IndTFor0)
 {
   IndFor0 = IndFor0-1;
   IndTFor0 = IndTFor0-1;
@@ -228,16 +228,16 @@ vec FitRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, double I
   int m = beta.size();
   int ns = y.size();
   int m0 = m/nt;
-  vec M(ns); M.fill(Intercept);
+  arma::vec M(ns); M.fill(Intercept);
   for (int s=0;s<ns;s++) for (int g=0;g<m0;g++) {M(s) = M(s) + x0(IndFor0(s),g) * beta(g+IndTFor0(s)*m0);}
-  vec p(ns); p = 1.0/(1.0+exp(-M)); for (int s=0;s<ns;s++) {if (p(s) > 1.0-1e-5) p(s)=1.0-1e-5; else if (p(s)<1.0e-5) p(s)=1.0e-5;}
+  arma::vec p(ns); p = 1.0/(1.0+exp(-M)); for (int s=0;s<ns;s++) {if (p(s) > 1.0-1e-5) p(s)=1.0-1e-5; else if (p(s)<1.0e-5) p(s)=1.0e-5;}
 
   double LL=0;
   for (int s=0;s<ns;s++) LL += -y(s)*log(p(s))*w(s) - (1-y(s))*log(1.0-p(s))*w(s);
   for (int g=1;g<m0;g++) for (int it=0;it<nt;it++) LL += lam1*abs(beta(g+it*m0));
   for (int g=1;g<m0;g++) for (int it=0;it<nt-1;it++) LL+= lam2*(beta(g+(it+1)*m0)-beta(g+it*m0))*(beta(g+(it+1)*m0)-beta(g+it*m0));
   double LLprev = 0;
-  vec betaPrev = -beta;
+  arma::vec betaPrev = -beta;
   while (abs(LL-LLprev)/sqrt(LLprev*LLprev+LL*LL)>1.0e-5 | any(sgn(beta)!=sgn(betaPrev)))
   {
     LLprev = LL;
