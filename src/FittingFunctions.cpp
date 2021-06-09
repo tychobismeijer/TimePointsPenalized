@@ -209,7 +209,6 @@ vec SingleGeneRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, d
 }
 
 
-// [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 vec FitRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, double Intercept, vec w, vec IndFor0,vec IndTFor0)
 {
