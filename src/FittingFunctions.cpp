@@ -9,7 +9,11 @@ using namespace arma;
 #include <Rdefines.h>
 #include <iostream>
 #include <vector>
+
+
+
 // Returns sign of a vector
+// [[Rcpp::export]]
 vec sgn(vec val) {
   vec out(val.size());
   for (int i=0; i<val.size(); i++)
@@ -22,6 +26,7 @@ vec sgn(vec val) {
 }
 
 // Make one step for the t-group of a gene (soft threshold)
+// [[Rcpp::export]]
 vec glmnetSimple(mat X,vec Y,double lam1)
 {
   int ng = Y.size();
@@ -36,6 +41,7 @@ vec glmnetSimple(mat X,vec Y,double lam1)
 
 
 // Calculates first (b) and second (a) derivatives of the function to minimize 
+// [[Rcpp::export]]
 void GetHessian(mat x, vec beta, vec p, vec y, double lam2, vec w, vec& b, mat& a) 
 {
   int ng = beta.size();
@@ -69,6 +75,7 @@ void GetHessian(mat x, vec beta, vec p, vec y, double lam2, vec w, vec& b, mat& 
 }
 
 // Calculates intercept in iterative way 
+// [[Rcpp::export]]
 double CalculateDeltaIntercept(vec y, vec p, vec w)
 {
   int ns = y.size();
@@ -86,7 +93,7 @@ double CalculateDeltaIntercept(vec y, vec p, vec w)
 }
 
 
-
+// [[Rcpp::export]]
 vec GroupRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, double& Intercept, vec w, vec IndFor0,vec IndTFor0, vec& M, double& LLmin)
 {
   int m = beta.size();
@@ -145,6 +152,8 @@ vec GroupRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, double
   return(beta);
 }
 
+
+// [[Rcpp::export]]
 vec SingleGeneRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, double& Intercept, vec w, vec IndFor0,vec IndTFor0, vec& M, double& LLmin)
 {
   int m = beta.size();
