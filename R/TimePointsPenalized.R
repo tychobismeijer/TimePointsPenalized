@@ -1,25 +1,3 @@
-library(expm)
-library(glmnet)
-library(Rcpp)
-library(pROC)
-library(stringr)
-library(tidyverse)
-library(ggpubr)
-library(ComplexHeatmap)
-require(doParallel)
-library(RcppArmadillo)
-library(Rcpp)
-library(devtools)
-library(usethis)
-system("export OPENBLAS_NUM_THREADS=1")
-system("export GOTO_NUM_THREADS=1")
-system("export OMP_NUM_THREADS=1")
-compileAttributes()
-# Rcpp::sourceCpp("/home/misha/Documents/Development/TimePointsPenalized/src/FittingFunctions.cpp")
-sourceCpp("src/FittingFunctions.cpp")
-install_github("mishashe/TimePointsPenalized")
-
-
 
 fitTimePointsPenalized <- function(y0, x0, FollowUp, lam1V, gamma, tV, standardize=TRUE, Clinilal0=data.frame(case_control0=y0), cores=1)
 {     
