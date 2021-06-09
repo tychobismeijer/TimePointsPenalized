@@ -215,7 +215,7 @@ vec FitRound(mat x0, vec y, vec tV, double lam1, double lam2, vec beta, double I
   IndFor0 = IndFor0-1;
   IndTFor0 = IndTFor0-1;
   int nt = tV.size();
-  w=w/accu(w);
+  w=w/accu(w); 
   int m = beta.size();
   int ns = y.size();
   int m0 = m/nt;
