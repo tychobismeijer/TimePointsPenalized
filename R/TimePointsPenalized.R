@@ -1,6 +1,17 @@
-#' @useDynLib mypackage, .registration=TRUE
+#' TimePointsPenalized: Lasso with penalized differences between adjacent time points 
+#'
+#' 
+#' @section Mypackage functions:
+#' A package to fit lasso with penalized differences between adjacent time points coefficients.
+#'
+#' @docType package
+#' @name TimePointsPenalized
+#' @useDynLib TimePointsPenalized, .registration=TRUE
+NULL
 
-#' fits lasso with penalized differences between adjacent time pounts coefficients 
+
+
+#' Fit lasso with penalized differences between adjacent time points coefficients 
 #'
 #' @param y0 case/control vector (no time iformation - "naive" approach)
 #' @param x0 gene expression matrix (rows-samples by columns-genes)
@@ -14,8 +25,11 @@
 #' @export
 fitTimePointsPenalized <- function(y0, x0, FollowUp, lam1V, gamma, tV, standardize=TRUE, Clinilal0=data.frame(case_control0=y0), cores=1)
 {     
-  registerDoParallel(cores = cores)
-  if (standardize) for (i in 1:ncol(x0)) x0[,i] <- (x0[,i] - mean(x0[,i]))/sd(x0[,i])
+  if (standardize) {
+    for (i in 1:ncol(x0)) {
+      x0[,i] <- (x0[,i] - mean(x0[,i]))/sd(x0[,i])
+    }
+  }
   Intercept <- 0
   beta <- rep(0,ncol(x0)*length(tV))
   y <- c()
@@ -59,7 +73,6 @@ fitTimePointsPenalized <- function(y0, x0, FollowUp, lam1V, gamma, tV, standardi
   {
     lam1 <- lam1V[ilam1]
     lam2 <- gamma*lam1
-    # fits <- list(fits,.Call("_TimePointsPenalized_FitRound", x0, y, tV, lam1, lam2, beta, Intercept, w, IndFor0, IndTFor0));
     fits <- list(fits,FitRound(x0, y, tV, lam1, lam2, beta, Intercept, w, IndFor0, IndTFor0))
     
     beta <- fits[[ilam1]]$beta
