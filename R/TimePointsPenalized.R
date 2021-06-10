@@ -1,3 +1,5 @@
+#' @useDynLib mypackage, .registration=TRUE
+
 #' fits lasso with penalized differences between adjacent time pounts coefficients 
 #'
 #' @param y0 case/control vector (no time iformation - "naive" approach)

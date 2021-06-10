@@ -1,11 +1,28 @@
 Package: TimePointsPenalized
-Type: Package
-Title: What the Package Does in One 'Title Case' Line
-Version: 1.0
-Date: 2021-06-07
-Author: Your Name
-Maintainer: Your Name <your@email.com>
-Description: One paragraph description of what the package does as one or more full sentences.
-License: GPL (>= 2)
-Imports: Rcpp (>= 1.0.5)
-LinkingTo: Rcpp,RcppArmadillo
+Title: Regularized fitting of logistic regression of outcome over time
+Version: 0.1
+Authors@R: c(
+    person(given = "Misha",
+           family = "Sheinman",
+           role = c("aut", "cre"),
+           email = "m.sheinman@nki.nl",
+           comment = c(ORCID = "https://orcid.org/0000-0002-3717-1722"),
+           ),
+    person(given = "Tycho",
+           family = "Bismeijer",
+           role = c("aut"),
+           email = "t.bismeijer@nki.nl",
+           comment = c(ORCID = "https://orcid.org/0000-0001-6514-4767"),
+           )
+    )
+Description: Fits a regularized logistic regression of outcome over time.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+LinkingTo: 
+    Rcpp,
+    RcppArmadillo
+Imports: 
+    Rcpp
